@@ -1,0 +1,108 @@
+<ion-header>
+   <ion-navbar color="primary"> 
+    <ion-title>Reddits</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="openSelect()" >
+          <ion-icon name="ios-funnel"></ion-icon>
+        </button>
+        <input hidden [ngModel]="isListed" #isListedValue>
+        <button ion-button icon-only (click)="changePostsAlignment(isListedValue.value)" name="listing">
+          <ion-icon *ngIf="isListed" name="browsers"></ion-icon>
+          <ion-icon *ngIf="!isListed" name="menu"></ion-icon>
+        </button>
+      </ion-buttons>
+   </ion-navbar> 
+</ion-header>
+
+<ion-content class="bg-light">
+    <ion-list no-margin> 
+      <ion-item class="border-bottom">
+        <ion-label> Category </ion-label>
+        <ion-select (ionChange)="updatePosts()" [(ngModel)]="category" name="category" >
+          <ion-option value="sports">Sports</ion-option>
+          <ion-option value="food">Food</ion-option>
+          <ion-option value="news">News</ion-option>
+          <ion-option value="music">Music</ion-option>
+          <ion-option value="funny">Funny</ion-option>
+          <ion-option value="gaming">Gaming</ion-option>
+          <ion-option value="art">Art</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item hidden>
+        <ion-label> Sort by </ion-label>
+        <ion-select #sortingSelect (ionChange)="updatePosts()" [(ngModel)]="sorting" name="sorting" >
+          <ion-option value="newest" selected>Newest</ion-option>
+          <ion-option value="likes">Most Liked</ion-option>
+          <ion-option value="comments">Most Commented</ion-option>
+        </ion-select>
+      </ion-item> 
+    </ion-list>
+    <!-- <ion-note ion-item text-center class="no-border">
+      {{ postItems.length || 'Loading..' }} posts showed.
+    </ion-note> -->
+  <ion-list *ngIf="isListed">
+    <ion-item *ngFor="let item of postItems">
+      <ion-thumbnail *ngIf="item.data.thumbnail" item-left>
+        <img *ngIf="isURL(item.data.thumbnail)" [src]=" item.data.thumbnail ">
+         <img *ngIf="!isURL(item.data.thumbnail)" src="https://www.justpro.co/img/no-image.png" alt=""> 
+      </ion-thumbnail>
+      <h2 class="ellipsis">
+        {{ item.data.title }}
+      </h2>
+
+      <div>
+        <ion-note class="smaller-text" >
+            <ion-icon color="danger" name="heart"> <span>{{item.data.score}}</span>  </ion-icon>
+          &nbsp;&nbsp;
+            <ion-icon color="primary" name="chatboxes"> <span>{{item.data.num_comments}}</span>  </ion-icon>
+        </ion-note>
+      </div>
+
+      <div>
+        <ion-note class="smaller-text" >
+            <ion-icon name="time"> <span>{{item.data.created_utc | amFromUnix | amTimeAgo }}</span>  </ion-icon>
+        </ion-note>
+      </div>
+      <button ion-button clear item-right (click)="openPostDetail(item.data)" >View</button>
+    </ion-item>
+  </ion-list>
+
+
+
+  <ion-list *ngIf="!isListed" class="block-listing">
+      <ion-card *ngFor="let item of postItems">
+        <div *ngIf="item.data.preview">
+          <img src="{{item.data.preview.images[0].source.url}}" onError="this.src = 'https://www.justpro.co/img/no-image.png'" >
+          <!-- <img src="https://www.justpro.co/img/no-image.png" alt="">  -->
+        </div>
+        <ion-card-content>
+          <ion-card-title class="card-type-title">
+            {{ item.data.title | truncate : "60" }} 
+          </ion-card-title>
+          <ion-row class="small-icons-row">
+            <ion-col>
+              <ion-icon color="danger" name="heart"> 
+                <span>{{item.data.score}}</span>
+              </ion-icon>
+              &nbsp;&nbsp;
+              <ion-icon color="primary" name="chatboxes"> 
+                <span>{{item.data.num_comments}}</span> 
+              </ion-icon>
+            </ion-col>
+            <ion-col right text-right>
+              <ion-note>
+                <ion-icon name="time"> 
+                  <span> {{item.data.created_utc | amFromUnix | amTimeAgo }} </span> 
+                </ion-icon>
+              </ion-note>
+            </ion-col>
+          </ion-row>
+          <p>
+            &nbsp;&nbsp;
+          </p>
+          <button ion-button block (click)="openPostDetail(item.data)" >View More</button>
+        </ion-card-content>
+        
+      </ion-card>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+           {{ data.title}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding class="bg-light">
+    <ion-card>
+        <img *ngIf="data.preview" src="{{data.preview.images[0].source.url}}" onError="this.parentNode.removeChild(this);">
+        <ion-card-content>
+            <ion-card-title>
+                {{data.title}}
+            </ion-card-title>
+            <ion-list>
+                <ion-item>
+                    <ion-icon color="primary" name="person" item-left></ion-icon>
+                    Author
+                    <ion-note item-right>
+                        {{data.author}}
+                    </ion-note>
+                </ion-item>
+                <ion-item>
+                    <ion-icon color="primary" name="thumbs-up" item-left></ion-icon>
+                    Likes
+                    <ion-note item-right>
+                        {{data.score}}
+                    </ion-note>
+                </ion-item>
+                <ion-item class="no-border">
+                    <ion-icon color="primary" name="chatboxes" item-left></ion-icon>
+                    Comments
+                    <ion-note item-right>
+                       {{data.num_comments}} 
+                    </ion-note>
+                </ion-item>
+            </ion-list>
+            <a href="https://reddit.com{{data.permalink}}" ion-button block target="_blank">View on Reddit</a>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
